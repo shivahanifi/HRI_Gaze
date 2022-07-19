@@ -1,0 +1,88 @@
+<application>
+<name>mutual gaze classifier localhost realsense</name>
+<version>1.0</version>
+
+<!-- Modules -->
+
+	<module>
+		<name>yarpOpenPose</name>
+		<parameters>--from /home/shanifi/code/human-sensing/yarpOpenPose/app/conf/yarpopenpose.ini</parameters>
+		<node>localhost</node>
+	</module>
+	
+	<module>
+		<name>mutualgaze-classifier.py</name>
+		<parameters>--from /home/shanifi/code/mutual-gaze-classifier-demo/app/config/classifier_conf.ini</parameters>
+		<node>localhost</node>
+	</module>
+
+	<module>
+		<name>yarpdev</name>
+		<parameters>--from /home/shanifi/code/human-sensing/yarpOpenPose/app/conf/realsense_conf.ini</parameters>
+		<node>localhost</node>
+	</module>
+
+	<module>
+		<name>yarpview</name>
+		<parameters>--name /view/rgb --w 640 --h 480</parameters>
+		<node>localhost</node>
+	</module>
+
+	<module>
+		<name>yarpview</name>
+		<parameters>--name /view/skeleton --w 640 --h 480</parameters>
+		<node>localhost</node>
+	</module>
+
+	<module>
+	      	<name>yarpview</name>
+	      	<parameters>--name /view/eyecontact --w 640 --h 480</parameters>
+	      	<node>localhost</node>
+	</module>
+
+
+<!-- Connections -->
+
+	<connection>
+		<from>/depthCamera/rgbImage:o</from>
+		<to>/view/rgb</to>
+		<protocol>mjpeg</protocol>
+	</connection>
+
+	<connection>
+		<from>/depthCamera/rgbImage:o</from>
+		<to>/yarpOpenPose/image:i</to>
+		<protocol>mjpeg</protocol>
+	</connection>
+
+	<connection>
+		<from>/yarpOpenPose/image:o</from>
+		<to>/view/skeleton</to>
+		<protocol>mjpeg</protocol>
+	</connection>
+	
+	<connection>
+		<from>/yarpOpenPose/propag:o</from>
+		<to>/mutualgaze/image:i</to>
+		<protocol>mjpeg</protocol>
+	</connection>
+
+	<connection>
+		<from>/yarpOpenPose/target:o</from>
+		<to>/mutualgaze/data:i</to>
+	</connection>
+
+	<connection>
+	      	<from>/yarpOpenPose/float:o</from>
+	      	<to>/mutualgaze/depth:i</to>
+	      	<protocol>fast_tcp</protocol>
+	</connection>
+
+	<connection>
+	      	<from>/mutualgaze/image:o</from>
+	      	<to>/view/eyecontact</to>
+	      	<protocol>mjpeg</protocol>
+	</connection>
+
+</application>
+
