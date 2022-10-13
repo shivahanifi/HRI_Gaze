@@ -1,5 +1,5 @@
 ## MGC_test #1 
-The source code for this test is from [mutual-gaze-classifier-demo](https://github.com/MariaLombardi/mutual-gaze-classifier-demo) repository.
+This is the test for one-person mutual gaze classifier. The source code for this test is from [mutual-gaze-classifier-demo](https://github.com/MariaLombardi/mutual-gaze-classifier-demo) repository.
 
 ## Goal
 In this test, I will try to run the application `mutual-gaze-classifier-localhost-realsense` with the `mutualgaze-classifier.py` Python code.
@@ -33,13 +33,13 @@ In this test, I will try to run the application `mutual-gaze-classifier-localhos
         </module>
         ```
     - The port name has been changed but the XML file has not been updated. Therefore, you have to replace the port called `classifier` with `mutualgaze`.
-        ### Note: To check which ports are being used by the yarp you can look aty the name list. 
+        ### Note: To check which ports are being used by the yarp you can look at the name list. 
         ```
         yarp name list
         ```
     - There is another important change to be made. There will always be a difference in the frame rate of the depth camera and the yarpopenpose module. To keep them synchronized, We will connect the classifier to the yarpopenpose module and not directly to the depth camera.
 
-        To be more clear, we will use the input from depth camera only to be displayed at the `view/rgb` port and also as an input for the yarpopenpose i.e. `yarpopenpose/image:i`. Therefore, we will depthcamera with the yarpopenpose in other connections.
+        To be more clear, we will use the input from depth camera only to be displayed at the `view/rgb` port and also as an input for the yarpopenpose i.e. `yarpopenpose/image:i`. Therefore, we will use depthcamera with the yarpopenpose in other connections.
     ```
             <connection>
                 <from>/yarpOpenPose/image:o</from>
@@ -65,12 +65,15 @@ In this test, I will try to run the application `mutual-gaze-classifier-localhos
             </connection>
 
     ```
-4. Open the `yarpmanager` and add the XML discription of the application `mutual-gaze-classifier-localhost-realsense.xml`.
-5. Run the modules, and then connect them to see the results. The classifier view is supposed to specify whether you are looking at the camera or not.
+
+5. Open the `yarpmanager` and add the XML discription of the application `mutual-gaze-classifier-localhost-realsense.xml`.
+   
+6. Run the modules, and then connect them to see the results. The classifier view is supposed to specify whether you are looking at the camera or not.
     ### ERROR
     The `mjpeg` protocol needs to be installed seperately and you will recieve connection error if you have not installed them beforehand. To solve the problem you can change the protocol  in 2 different ways. The permenant way would be to change them in the XML file, but to change them temporarily, you can just use yarpmanager and modify the carriers from the yarpmanager.
 
-![no mutual gaze](MGC_test1/pictures/MGC1No.png)
-![mutual gaze](MGC_test1/pictures/MGC1Yes.png)
+![no mutual gaze](Img/MGC1No.png)
+![mutual gaze](Img/MGC1Yes.png)
 ### Note
-The face keypoints has to be enabled in the yarpopenpose module for the classifier to work properly. (you can check it from the `yarpopenpose.ini` file.)
+- The face keypoints has to be enabled in the yarpopenpose module for the classifier to work properly. (you can check it from the `yarpopenpose.ini` file.)
+- If there is more than one person in the frame, the classifier will work for the skeleton with the index 1 in the openpose. Since the index may change, the classification may jump from one person to the other.
